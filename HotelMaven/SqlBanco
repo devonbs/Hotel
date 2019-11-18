@@ -1,0 +1,86 @@
+--- Script gerados pelo Postgresql
+
+-- Table: public.diaria
+
+-- DROP TABLE public.diaria;
+
+CREATE TABLE public.diaria
+(
+    id_diaria integer NOT NULL DEFAULT nextval('diaria_id_diaria_seq'::regclass),
+    hospedagem_id integer,
+    tipo_diaria_id integer,
+    data_diaria timestamp without time zone,
+    CONSTRAINT diaria_pkey PRIMARY KEY (id_diaria),
+    CONSTRAINT diaria_hospedagem_id_fkey FOREIGN KEY (hospedagem_id)
+        REFERENCES public.hospedagem (id_hospedagem) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT diaria_tipo_diaria_id_fkey FOREIGN KEY (tipo_diaria_id)
+        REFERENCES public.tipo_diaria (id_tipo_diaria) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.diaria
+    OWNER to postgres;
+    
+-- Table: public.hospedagem
+
+-- DROP TABLE public.hospedagem;
+
+CREATE TABLE public.hospedagem
+(
+    id_hospedagem integer NOT NULL DEFAULT nextval('hospedagem_id_hospedagem_seq'::regclass),
+    hospede_id integer,
+    data_entrada timestamp without time zone NOT NULL,
+    data_saida timestamp without time zone NOT NULL,
+    adicional_veiculo boolean,
+    CONSTRAINT hospedagem_pkey PRIMARY KEY (id_hospedagem),
+    CONSTRAINT hospedagem_hospede_id_fkey FOREIGN KEY (hospede_id)
+        REFERENCES public.hospede (id_hospede) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.hospedagem
+    OWNER to postgres;
+    
+-- Table: public.hospede
+
+-- DROP TABLE public.hospede;
+
+CREATE TABLE public.hospede
+(
+    id_hospede integer NOT NULL DEFAULT nextval('hospede_id_hospede_seq'::regclass),
+    nome character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    documento character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    telefone character varying(30) COLLATE pg_catalog."default",
+    CONSTRAINT hospede_pkey PRIMARY KEY (id_hospede)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.hospede
+    OWNER to postgres;
+    
+-- Table: public.tipo_diaria
+
+-- DROP TABLE public.tipo_diaria;
+
+CREATE TABLE public.tipo_diaria
+(
+    id_tipo_diaria integer NOT NULL DEFAULT nextval('tipo_diaria_id_tipo_diaria_seq'::regclass),
+    tipo character varying(30) COLLATE pg_catalog."default",
+    valor numeric(10,2),
+    valor_automovel numeric(10,2),
+    CONSTRAINT tipo_diaria_pkey PRIMARY KEY (id_tipo_diaria)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.tipo_diaria
+    OWNER to postgres;
